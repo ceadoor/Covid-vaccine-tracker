@@ -6,5 +6,10 @@
     <string name="bold" tools:ignore="ReferenceType">@font/rubik_bold</string>
     <string name="regular" tools:ignore="ReferenceType">@font/rubik_regular</string>
     <string name="light" tools:ignore="ReferenceType">@font/rubik_light</string>
+    <string name="search_by_pin">Search By PIN</string>
+    <string name="search_by_district">Search By District</string>
+    <string name="pin_code">PIN Code</string>
+    <string name="submit">Submit</string>
+    <string name="search">Search</string>
 
 </resources>

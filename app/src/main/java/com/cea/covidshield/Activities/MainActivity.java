@@ -1,8 +1,13 @@
 package com.cea.covidshield.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,6 +16,7 @@ import com.cea.covidshield.Api.ApiService;
 import com.cea.covidshield.R;
 import com.cea.covidshield.model.CountryOverview;
 import com.cea.covidshield.model.VaccineModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
@@ -40,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView dose2_tv;
     private TextView updatedate;
     private PieChart pieChart;
+    private AppCompatButton searchByPinBtn;
+    private AppCompatButton searchByDistrictBtn;
+    private BottomSheetDialog bottomSheetDialog;
 
     private List<CountryOverview> country_list;
     private VaccineModel vaccineData;
@@ -118,6 +127,32 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+        searchByPinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                     bottomSheetDialog = new BottomSheetDialog(MainActivity.this,R.style.BottomSheetTheme);
+
+                     View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_layout_pin,
+                             findViewById(R.id.bottom_sheet_pin));
+                EditText pinCodeET = sheetView.findViewById(R.id.pic_code_edittext);
+                     sheetView.findViewById(R.id.pin_search_btn).setOnClickListener(new View.OnClickListener(){
+                         @Override
+                         public void onClick(View v) {
+                             if (TextUtils.isEmpty(pinCodeET.getText().toString())){
+                                 Toast.makeText(MainActivity.this,"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
+                             }
+                             else{
+                                 Toast.makeText(MainActivity.this,"Search Button Clicked " + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();
+                                 bottomSheetDialog.dismiss();
+                             }
+                         }
+                     });
+
+                     bottomSheetDialog.setContentView(sheetView);
+                     bottomSheetDialog.show();
+            }
+        });
+
 
     }
 
@@ -144,6 +179,11 @@ public class MainActivity extends AppCompatActivity {
         updatedate = findViewById(R.id.update_date);
         dose1_tv = findViewById(R.id.dose1);
         dose2_tv = findViewById(R.id.dose2);
+
+        searchByPinBtn = findViewById(R.id.search_by_pin_btn);
+        searchByDistrictBtn = findViewById(R.id.search_by_district_btn);
+
+
 
     }
 
