@@ -607,37 +607,45 @@
 
         </GridLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Know about COVID-19 Vaccines"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:fontFamily="@font/rubik_bold"
-            android:textSize="@dimen/text_size"
-            android:layout_marginTop="10dp"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/search_by_pin_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/search_by_pin"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/oval"
-            android:fontFamily="@string/regular"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/search_by_district_btn"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/search_by_district"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/oval"
-                android:fontFamily="@string/regular"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_background_homescreen"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/rubik_bold"
+                    android:gravity="center"
+                    android:text="Know about COVID-19 Vaccines"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/search_by_pin_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/oval"
+                    android:fontFamily="@string/regular"
+                    android:text="@string/search_by_pin" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/search_by_district_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/oval"
+                    android:fontFamily="@string/regular"
+                    android:text="@string/search_by_district" />
+            </LinearLayout>
 
         </LinearLayout>
 
