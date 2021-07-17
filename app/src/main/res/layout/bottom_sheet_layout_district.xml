@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background"
+    android:padding="5dp"
+    android:id="@+id/bottom_sheet_pin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/search_by_district"
+        android:textSize="@dimen/title_size"
+        android:gravity="center"
+        android:fontFamily="@font/rubik_bold"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+    <AutoCompleteTextView
+        android:id="@+id/state_actv"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="40dp"
+        android:hint="@string/state"
+        android:inputType="text"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+
+        <ImageView
+            android:id="@+id/state_drop_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_drop_down"
+            android:layout_marginTop="30dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <AutoCompleteTextView
+            android:id="@+id/district_actv"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="40dp"
+            android:hint="@string/district"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+
+        <ImageView
+            android:id="@+id/district_drop_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_drop_down"
+            android:layout_marginTop="30dp"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/district_search_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/color_primary"
+        android:textColor="@color/white"
+        android:text="@string/search"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:fontFamily="@font/rubik_regular"/>
+
+</LinearLayout>

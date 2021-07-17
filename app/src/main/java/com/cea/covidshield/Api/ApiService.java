@@ -1,6 +1,7 @@
 package com.cea.covidshield.Api;
 
 import com.cea.covidshield.model.CountryOverview;
+import com.cea.covidshield.model.StateDetailModel;
 import com.cea.covidshield.model.VaccineModel;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public interface ApiService {
 
     @GET("vaccine/vaccine_counts_today.json")
     Call<VaccineModel> getVaccineDosesinfo(@Query("timestamp") String timestamp);
+
+    @GET("v2/admin/location/states")
+    Call<StateDetailModel> getStates();
 
 }
 

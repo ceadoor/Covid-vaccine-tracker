@@ -33,4 +33,6 @@
     <string name="search">Search</string>
     <string name="menu_donport">Donation Portal</string>
     <string name="dontn_portal">Donation Portal</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
 </resources>

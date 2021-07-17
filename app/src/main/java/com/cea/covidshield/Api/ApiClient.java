@@ -2,6 +2,8 @@ package com.cea.covidshield.Api;
 
 import android.content.Context;
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -11,7 +13,7 @@ public class ApiClient {
     public static ApiClient instance;
     private static Context mContext;
 
-    private String BASE_URL_COWIN = "https://cdn-api.co-vin.in/api";
+    private String BASE_URL_COWIN = "https://cdn-api.co-vin.in/api/";
     private String BASE_URL_COUNTRY = "https://corona.lmao.ninja/";
     private String BASE_URL_VACCINE = "https://www.mygov.in/sites/default/files/covid/";
 
@@ -33,9 +35,21 @@ public class ApiClient {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
+        ChuckerInterceptor chuckerInterceptor = new ChuckerInterceptor(mContext);
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new ChuckerInterceptor(mContext))
+                .addNetworkInterceptor(chain ->
+                        chain.proceed(
+                                chain.request()
+                                .newBuilder()
+                                .header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
+                                .build()
+                        ))
                 .build();
+
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL_COWIN)
@@ -52,6 +66,7 @@ public class ApiClient {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new ChuckerInterceptor(mContext))
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -69,6 +84,7 @@ public class ApiClient {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new ChuckerInterceptor(mContext))
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
