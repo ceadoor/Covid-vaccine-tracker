@@ -12,7 +12,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:background="@color/color_primary">
+        android:background="@color/color_primary"
+        >
 
         <ImageView
             android:layout_width="100dp"
@@ -217,7 +218,6 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="5dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/rounded_background_homescreen"
             android:orientation="vertical">
@@ -226,6 +226,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:fontFamily="@font/rubik_bold"
                 android:gravity="center"
                 android:text="Know about COVID-19 Vaccines"
@@ -239,6 +241,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/oval"
                 android:fontFamily="@string/regular"
                 android:text="@string/search_by_pin" />
@@ -250,6 +253,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/oval"
                 android:fontFamily="@string/regular"
                 android:text="@string/search_by_district" />

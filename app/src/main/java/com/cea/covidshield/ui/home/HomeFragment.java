@@ -104,11 +104,11 @@ public class HomeFragment extends Fragment{
                                 int death = Integer.parseInt(country_list.get(i).getDeaths());
 
                                 setUpdateDate(country_list.get(i).getUpdated());
-                                pieChart.addPieSlice(new PieModel("Confirm",confirm,getResources().getColor(R.color.yellow)));
-                                pieChart.addPieSlice(new PieModel("Active",active,getResources().getColor(R.color.orange)));
-                                pieChart.addPieSlice(new PieModel("Recovered",recovered,getResources().getColor(R.color.green_pie)));
-                                pieChart.addPieSlice(new PieModel("Death",death,getResources().getColor(R.color.red_pie)));
-
+                                pieChart.addPieSlice(new PieModel("Confirm",confirm,root.getResources().getColor(R.color.yellow)));
+                                pieChart.addPieSlice(new PieModel("Active",active,root.getResources().getColor(R.color.orange)));
+                                pieChart.addPieSlice(new PieModel("Recovered",recovered,root.getResources().getColor(R.color.green_pie)));
+                                pieChart.addPieSlice(new PieModel("Death",death,root.getResources().getColor(R.color.red_pie)));
+                                pieChart.startAnimation();
 
 
                             }
