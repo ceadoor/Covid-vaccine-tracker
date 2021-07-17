@@ -21,6 +21,10 @@
 
             android:title="@string/menu_blddonation" />
         <item
+            android:id="@+id/don_port"
+
+            android:title="@string/menu_donport" />
+        <item
             android:id="@+id/hlp_num"
 
             android:title="@string/menu_helpnum" />

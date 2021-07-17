@@ -31,4 +31,6 @@
     <string name="pin_code">PIN Code</string>
     <string name="submit">Submit</string>
     <string name="search">Search</string>
+    <string name="menu_donport">Donation Portal</string>
+    <string name="dontn_portal">Donation Portal</string>
 </resources>

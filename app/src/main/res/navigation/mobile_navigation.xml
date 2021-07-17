@@ -40,6 +40,11 @@
         android:label="@string/menu_helpnum"
         tools:layout="@layout/fragment_help_line" />
     <fragment
+        android:id="@+id/don_port"
+        android:name="com.cea.covidshield.ui.donation_portal.PortalFragment"
+        android:label="@string/menu_donport"
+        tools:layout="@layout/fragment_don_port" />
+    <fragment
         android:id="@+id/cvd_gd"
         android:name="com.cea.covidshield.ui.covid_guidelines.GuidelinesFragment"
         android:label="@string/menu_cvdgdlines"
