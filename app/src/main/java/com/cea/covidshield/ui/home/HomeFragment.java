@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.cea.covidshield.Api.ApiClient;
 import com.cea.covidshield.Api.ApiService;
 import com.cea.covidshield.R;
 import com.cea.covidshield.databinding.FragmentHomeBinding;
+import com.cea.covidshield.model.CountryAndVaccine;
 import com.cea.covidshield.model.CountryOverview;
 import com.cea.covidshield.model.VaccineModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -30,6 +33,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -61,6 +65,14 @@ public class HomeFragment extends Fragment{
 
     private FragmentHomeBinding binding;
 
+    public CountryAndVaccine CaV;
+
+    // Expanded View
+    ExpandableListView expandableListView;
+    ExpandableListAdapter expandableListAdapter;
+    List<String> expandableListTitle;
+    HashMap<String, List<CountryAndVaccine>> expandableListDetail;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -73,6 +85,7 @@ public class HomeFragment extends Fragment{
         apiService_country = ApiClient.getInstance(getActivity()).getService_Country();
         apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();
         init();
+        CaV = new CountryAndVaccine();
 
         apiService_country.getCountryData()
                 .enqueue(new Callback<List<CountryOverview>>() {
@@ -82,21 +95,13 @@ public class HomeFragment extends Fragment{
 
                         for (int i=0; i<country_list.size();i++){
                             if (country_list.get(i).getCountry().equals("India")){
+
+                                CaV.setCountryOverview(country_list.get(i));
+
                                 int confirm = Integer.parseInt(country_list.get(i).getCases());
                                 int active = Integer.parseInt(country_list.get(i).getActive());
                                 int recovered = Integer.parseInt(country_list.get(i).getRecovered());
                                 int death = Integer.parseInt(country_list.get(i).getDeaths());
-
-
-                                totalActive.setText(NumberFormat.getInstance().format(active));
-                                totalConfirm.setText(NumberFormat.getInstance().format(confirm));
-                                totalRecovered.setText(NumberFormat.getInstance().format(recovered));
-                                totalDeath.setText(NumberFormat.getInstance().format(death));
-
-                                todayDeath.setText(NumberFormat.getInstance().format(Integer.parseInt(country_list.get(i).getTodayDeaths())));
-                                todayConfirm.setText(NumberFormat.getInstance().format(Integer.parseInt(country_list.get(i).getTodayCases())));
-                                todayRecovered.setText(NumberFormat.getInstance().format(Integer.parseInt(country_list.get(i).getTodayRecovered())));
-                                totalTests.setText(NumberFormat.getInstance().format(Integer.parseInt(country_list.get(i).getTests())));
 
                                 setUpdateDate(country_list.get(i).getUpdated());
                                 pieChart.addPieSlice(new PieModel("Confirm",confirm,getResources().getColor(R.color.yellow)));
@@ -122,9 +127,11 @@ public class HomeFragment extends Fragment{
                 .enqueue(new Callback<VaccineModel>() {
                     @Override
                     public void onResponse(Call<VaccineModel> call, Response<VaccineModel> response) {
+
                         vaccineData = response.body();
-                        dose1_tv.setText(NumberFormat.getInstance().format(Integer.parseInt(vaccineData.getIndia_dose1())));
-                        dose2_tv.setText(NumberFormat.getInstance().format(Integer.parseInt(vaccineData.getIndia_dose2())));
+
+                        CaV.setVaccineModel(vaccineData);
+
 
                     }
 
@@ -164,6 +171,36 @@ public class HomeFragment extends Fragment{
             }
         });
 
+//        Toast.makeText(getActivity(), "CaV " + CaV.getCountryOverview().getActive()+CaV.getVaccineModel().getIndia_dose1(), Toast.LENGTH_SHORT).show();
+
+        expandableListView = binding.expandableListView;
+        expandableListDetail = ExpandableListData.getData(CaV);
+        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
+        expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);
+        expandableListView.setAdapter(expandableListAdapter);
+
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getContext(),
+                        expandableListTitle.get(groupPosition) + " List Expanded.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getContext(),
+                        expandableListTitle.get(groupPosition) + " List Collapsed.",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         //
 
 
@@ -182,23 +219,12 @@ public class HomeFragment extends Fragment{
     }
 
     private void init(){
-        totalConfirm = binding.totalConfirm;
-        totalActive = binding.totalActive;
-        totalDeath = binding.totalDeath;
-        totalRecovered = binding.totalRecovered;
-        totalTests = binding.totalTests;
-        todayConfirm = binding.todayConfirm;
-        todayRecovered = binding.todayRecovered;
-        todayDeath = binding.todayDeath;
+
         pieChart = binding.pieChart;
         updatedate = binding.updateDate;
-        dose1_tv = binding.dose1;
-        dose2_tv = binding.dose2;
 
         searchByPinBtn = binding.searchByPinBtn;
         searchByDistrictBtn = binding.searchByDistrictBtn;
-
-
 
     }
 
