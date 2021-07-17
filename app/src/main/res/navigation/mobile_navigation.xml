@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/app_start">
+
+
+    <fragment
+        android:id="@+id/app_start"
+        android:name="com.cea.covidshield.ui.home.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/ask_req"
+        android:name="com.cea.covidshield.ui.ask_requirement.AskreqFragment"
+        android:label="@string/menu_ask_req"
+        tools:layout="@layout/fragment_askreq" />
+
+    <fragment
+        android:id="@+id/govt_fac"
+        android:name="com.cea.covidshield.ui.gov_facilitators.GovfacilitatorsFragment"
+        android:label="@string/menu_govt_fac"
+        tools:layout="@layout/fragment_govfac" />
+
+    <fragment
+        android:id="@+id/tele_med"
+        android:name="com.cea.covidshield.ui.telemedicine.TelemedFragment"
+        android:label="@string/menu_telemedicine"
+        tools:layout="@layout/fragment_tele_med" />
+    <fragment
+        android:id="@+id/bld_don"
+        android:name="com.cea.covidshield.ui.blood_donation.DonationFragment"
+        android:label="@string/menu_blddonation"
+        tools:layout="@layout/fragment_bld_don" />
+    <fragment
+        android:id="@+id/hlp_num"
+        android:name="com.cea.covidshield.ui.helpline_numbers.HelplineFragment"
+        android:label="@string/menu_helpnum"
+        tools:layout="@layout/fragment_help_line" />
+    <fragment
+        android:id="@+id/cvd_gd"
+        android:name="com.cea.covidshield.ui.covid_guidelines.GuidelinesFragment"
+        android:label="@string/menu_cvdgdlines"
+        tools:layout="@layout/fragment_cvd_gd" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.cea.covidshield.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/about_us"
+        android:name="com.cea.covidshield.ui.about_us.AboutusFragment"
+        android:label="@string/menu_aboutus"
+        tools:layout="@layout/fragment_about_us" />
+</navigation>

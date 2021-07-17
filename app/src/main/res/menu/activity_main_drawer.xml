@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/ask_req"
+
+            android:title="@string/menu_ask_req" />
+        <item
+            android:id="@+id/govt_fac"
+
+            android:title="@string/menu_govt_fac" />
+        <item
+            android:id="@+id/tele_med"
+
+            android:title="@string/menu_telemedicine" />
+        <item
+            android:id="@+id/bld_don"
+
+            android:title="@string/menu_blddonation" />
+        <item
+            android:id="@+id/hlp_num"
+
+            android:title="@string/menu_helpnum" />
+        <item
+            android:id="@+id/cvd_gd"
+
+            android:title="@string/menu_cvdgdlines" />
+        <item
+            android:id="@+id/settings"
+
+            android:title="@string/menu_settings" />
+        <item
+            android:id="@+id/about_us"
+
+            android:title="@string/menu_aboutus" />
+    </group>
+</menu>
