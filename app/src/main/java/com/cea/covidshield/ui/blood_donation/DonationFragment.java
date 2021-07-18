@@ -7,14 +7,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
-
+import com.cea.covidshield.R;
 import com.cea.covidshield.databinding.FragmentBldDonBinding;
 
 
@@ -23,7 +22,7 @@ public class DonationFragment extends Fragment implements AdapterView.OnItemSele
 
 
     private FragmentBldDonBinding binding;
-    String[] bloodGroup = { "A+ve", "A-ve", "B+ve", "B-ve", "AB+ve", "AB-ve", "O+ve", "O-ve" };
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -34,25 +33,9 @@ public class DonationFragment extends Fragment implements AdapterView.OnItemSele
 
         final Button button = binding.button;
 
-
-        Spinner spin = binding.spinner;
-
-        ArrayAdapter ad
-                = new ArrayAdapter(
-                getContext(),
-                android.R.layout.simple_spinner_item,
-                bloodGroup);
-
-        ad.setDropDownViewResource(
-                android.R.layout
-                        .simple_spinner_dropdown_item);
-
-        // Set the ArrayAdapter (ad) data on the
-        // Spinner which binds data to spinner
-        spin.setAdapter(ad);
-
-        spin.setOnItemSelectedListener(this);
-
+        String[] blood_donation_dropdown = root.getResources().getStringArray(R.array.blood_donation_dropdown);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.fragment_bld_don_dropdown_item, blood_donation_dropdown);
+        binding.textView2.setAdapter(arrayAdapter);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,10 +84,6 @@ public class DonationFragment extends Fragment implements AdapterView.OnItemSele
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(getActivity(),
-                bloodGroup[i],
-                Toast.LENGTH_LONG)
-                .show();
 
     }
 

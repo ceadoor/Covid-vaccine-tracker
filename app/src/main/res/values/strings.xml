@@ -33,4 +33,21 @@
     <string name="search">Search</string>
     <string name="menu_donport">Donation Portal</string>
     <string name="dontn_portal">Donation Portal</string>
+
+
+<!--    Blood donation dropdown-->
+
+    <string-array name="blood_donation_dropdown">
+        <item>A+ve</item>
+        <item>A-ve</item>
+        <item>B+ve</item>
+        <item>B-ve</item>
+        <item>AB+ve</item>
+        <item>AB-ve</item>
+        <item>O+ve</item>
+        <item>O-ve</item>
+
+
+    </string-array>
+
 </resources>

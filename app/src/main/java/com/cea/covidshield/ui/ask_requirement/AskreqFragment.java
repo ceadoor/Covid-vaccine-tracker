@@ -49,7 +49,7 @@ public class AskreqFragment extends Fragment {
                     binding.names.requestFocus();
                     binding.names.setError("ENTER ONLY ALPHABETICAL CHARACTER");
                 }
-                else if(phone.length()==0)
+                else if(phone.length()==0 && !phone.matches("[0-9],+"))
                 {
                     binding.Phone.requestFocus();
                     binding.Phone.setError("FIELD CANNOT BE EMPTY");
