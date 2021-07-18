@@ -1,172 +1,351 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.helpline_numbers.HelplineFragment">
 
-
-    <Button
-        android:id="@+id/disha_dial"
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginLeft="124dp"
-        android:layout_marginTop="56dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        tools:layout_editor_absoluteX="10dp">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Disha Helpline"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/police_dial"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/animationView2"
+                android:fontFamily="@font/rubik_regular"
+                android:text="Disha Helpline"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/disha_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="160dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/card">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Police Highway Helpline"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/women_dial"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/TextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Police Highway"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/rubik_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/animationView3"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/police_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
-        android:layout_marginTop="288dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/card2">
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="288dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Women Helpline"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/child_dial"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/TextView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Woman Helpline"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/rubik_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/animationView4"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/women_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="408dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/card3">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="396dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Child Helpline"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/fld_dial"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/TextView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Child Helpline"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/rubik_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/animationView5"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/child_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="528dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/card4">
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="504dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Flood/Disaster Helpline"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/cyber_dial"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/TextView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flood/Disaster"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/rubik_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/animationView6"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView6"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/fld_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="632dp"
-        android:text="Call"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/card5"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="113dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="616dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:text="Cyber Police Station (TVM) "
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/disha_dial"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/TextView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cyber Police Station"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/rubik_regular"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/animationView7"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView7"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"
+                app:layout_constraintVertical_bias="0.326"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_xwfz7ao8.json"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="194dp" />
+
+            <Button
+                android:id="@+id/cyber_dial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:layout_centerVertical="true"
+                android:text="Call"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
