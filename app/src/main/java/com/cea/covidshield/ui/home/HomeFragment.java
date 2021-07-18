@@ -5,9 +5,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +25,8 @@ import com.cea.covidshield.R;
 import com.cea.covidshield.databinding.FragmentHomeBinding;
 import com.cea.covidshield.model.CountryAndVaccine;
 import com.cea.covidshield.model.CountryOverview;
+import com.cea.covidshield.model.State;
+import com.cea.covidshield.model.StateDetailModel;
 import com.cea.covidshield.model.VaccineModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -62,6 +67,7 @@ public class HomeFragment extends Fragment{
     private VaccineModel vaccineData;
     public ApiService apiService_country;
     public ApiService apiService_vaccine;
+    public ApiService apiService_cowin;
 
     private FragmentHomeBinding binding;
 
@@ -73,6 +79,9 @@ public class HomeFragment extends Fragment{
     List<String> expandableListTitle;
     HashMap<String, List<CountryAndVaccine>> expandableListDetail;
 
+    List<State> stateList;
+    List<String> stateArray;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -82,8 +91,11 @@ public class HomeFragment extends Fragment{
         //
 
         country_list = new ArrayList<>();
+        stateList = new ArrayList<>();
+        stateArray = new ArrayList<>();
         apiService_country = ApiClient.getInstance(getActivity()).getService_Country();
         apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();
+        apiService_cowin = ApiClient.getInstance(getActivity()).getService_Cowin();
         init();
         CaV = new CountryAndVaccine();
 
@@ -142,6 +154,30 @@ public class HomeFragment extends Fragment{
                     }
                 });
 
+        apiService_cowin.getStates()
+                .enqueue(new Callback<StateDetailModel>() {
+                    @Override
+                    public void onResponse(Call<StateDetailModel> call, Response<StateDetailModel> response) {
+                        if (response.body() == null){
+                            Toast.makeText(getActivity(),"Error : " + "COWIN API",Toast.LENGTH_SHORT).show();
+
+                        }else {
+                            stateList.addAll(response.body().getStates());
+
+                            for(int i=0;i<stateList.size();i++){
+                                stateArray.add(stateList.get(i).getState_name());
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StateDetailModel> call, Throwable t) {
+                        Toast.makeText(getActivity(),"Error : " + t.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
         searchByPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +197,51 @@ public class HomeFragment extends Fragment{
                         }
                         else{
                             Toast.makeText(getActivity(),"Search Button Clicked " + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();
+                            bottomSheetDialog.dismiss();
+                        }
+                    }
+                });
+
+                bottomSheetDialog.setContentView(sheetView);
+                bottomSheetDialog.show();
+            }
+        });
+
+        searchByDistrictBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);
+
+                LayoutInflater inflater = getLayoutInflater();
+
+                //  View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout_pin,findViewById(R.id.bottom_sheet_pin));
+
+                View sheetView = inflater.inflate(R.layout.bottom_sheet_layout_district,container ,false);
+                AutoCompleteTextView stateActv = sheetView.findViewById(R.id.state_actv);
+                AutoCompleteTextView districtActv = sheetView.findViewById(R.id.district_actv);
+                ImageView stateDropImgView = sheetView.findViewById(R.id.state_drop_img);
+                ImageView districtDropImgView = sheetView.findViewById(R.id.district_drop_img);
+
+                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,stateArray);
+                stateActv.setAdapter(stateAdapter);
+
+                stateDropImgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        stateActv.showDropDown();
+                    }
+                });
+
+
+
+                sheetView.findViewById(R.id.district_search_btn).setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        if (TextUtils.isEmpty(stateActv.getText().toString())){
+                            Toast.makeText(getActivity(),"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getActivity(),"Search Button Clicked " + stateActv.getText().toString(),Toast.LENGTH_SHORT).show();
                             bottomSheetDialog.dismiss();
                         }
                     }
