@@ -1,0 +1,245 @@
+Index: app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.cea.covidshield.ui.home;\r\n\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.AutoCompleteTextView;\r\nimport android.widget.EditText;\r\nimport android.widget.ExpandableListAdapter;\r\nimport android.widget.ExpandableListView;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.widget.AppCompatButton;\r\nimport androidx.fragment.app.Fragment;\r\n\r\n\r\nimport com.cea.covidshield.Api.ApiClient;\r\nimport com.cea.covidshield.Api.ApiService;\r\nimport com.cea.covidshield.R;\r\nimport com.cea.covidshield.databinding.FragmentHomeBinding;\r\nimport com.cea.covidshield.model.CountryAndVaccine;\r\nimport com.cea.covidshield.model.CountryOverview;\r\nimport com.cea.covidshield.model.State;\r\nimport com.cea.covidshield.model.StateDetailModel;\r\nimport com.cea.covidshield.model.VaccineModel;\r\nimport com.google.android.material.bottomsheet.BottomSheetDialog;\r\n\r\nimport org.eazegraph.lib.charts.PieChart;\r\nimport org.eazegraph.lib.models.PieModel;\r\n\r\nimport java.text.DateFormat;\r\nimport java.text.NumberFormat;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class HomeFragment extends Fragment{\r\n\r\n    private TextView totalConfirm;\r\n    private TextView totalActive;\r\n    private TextView totalRecovered;\r\n    private TextView totalDeath;\r\n    private TextView totalTests;\r\n    private TextView todayConfirm;\r\n    private TextView todayRecovered;\r\n    private TextView todayDeath;\r\n    private TextView dose1_tv;\r\n    private TextView dose2_tv;\r\n    private TextView updatedate;\r\n    private PieChart pieChart;\r\n    private AppCompatButton searchByPinBtn;\r\n    private AppCompatButton searchByDistrictBtn;\r\n    private BottomSheetDialog bottomSheetDialog;\r\n\r\n    private List<CountryOverview> country_list;\r\n    private VaccineModel vaccineData;\r\n    public ApiService apiService_country;\r\n    public ApiService apiService_vaccine;\r\n    public ApiService apiService_cowin;\r\n\r\n    private FragmentHomeBinding binding;\r\n\r\n    public CountryAndVaccine CaV;\r\n\r\n    // Expanded View\r\n    ExpandableListView expandableListView;\r\n    ExpandableListAdapter expandableListAdapter;\r\n    List<String> expandableListTitle;\r\n    HashMap<String, List<CountryAndVaccine>> expandableListDetail;\r\n\r\n    List<State> stateList;\r\n    List<String> stateArray;\r\n\r\n    public View onCreateView(@NonNull LayoutInflater inflater,\r\n                             ViewGroup container, Bundle savedInstanceState) {\r\n\r\n        binding = FragmentHomeBinding.inflate(inflater, container, false);\r\n        View root = binding.getRoot();\r\n\r\n        //\r\n\r\n        country_list = new ArrayList<>();\r\n        stateList = new ArrayList<>();\r\n        stateArray = new ArrayList<>();\r\n        apiService_country = ApiClient.getInstance(getActivity()).getService_Country();\r\n        apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();\r\n        apiService_cowin = ApiClient.getInstance(getActivity()).getService_Cowin();\r\n        init();\r\n        CaV = new CountryAndVaccine();\r\n\r\n        apiService_country.getCountryData()\r\n                .enqueue(new Callback<List<CountryOverview>>() {\r\n                    @Override\r\n                    public void onResponse(Call<List<CountryOverview>> call, Response<List<CountryOverview>> response) {\r\n                        country_list.addAll(response.body());\r\n\r\n                        for (int i=0; i<country_list.size();i++){\r\n                            if (country_list.get(i).getCountry().equals(\"India\")){\r\n\r\n                                CaV.setCountryOverview(country_list.get(i));\r\n\r\n                                int confirm = Integer.parseInt(country_list.get(i).getCases());\r\n                                int active = Integer.parseInt(country_list.get(i).getActive());\r\n                                int recovered = Integer.parseInt(country_list.get(i).getRecovered());\r\n                                int death = Integer.parseInt(country_list.get(i).getDeaths());\r\n\r\n                                setUpdateDate(country_list.get(i).getUpdated());\r\n                                pieChart.addPieSlice(new PieModel(\"Confirm\",confirm,root.getResources().getColor(R.color.yellow)));\r\n                                pieChart.addPieSlice(new PieModel(\"Active\",active,root.getResources().getColor(R.color.orange)));\r\n                                pieChart.addPieSlice(new PieModel(\"Recovered\",recovered,root.getResources().getColor(R.color.green_pie)));\r\n                                pieChart.addPieSlice(new PieModel(\"Death\",death,root.getResources().getColor(R.color.red_pie)));\r\n                                pieChart.startAnimation();\r\n\r\n\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<List<CountryOverview>> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n\r\n        String timestamp = Long.toString(System.currentTimeMillis()/1000L);\r\n\r\n        apiService_vaccine.getVaccineDosesinfo(timestamp)\r\n                .enqueue(new Callback<VaccineModel>() {\r\n                    @Override\r\n                    public void onResponse(Call<VaccineModel> call, Response<VaccineModel> response) {\r\n\r\n                        vaccineData = response.body();\r\n\r\n                        CaV.setVaccineModel(vaccineData);\r\n\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<VaccineModel> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n\r\n                    }\r\n                });\r\n\r\n        apiService_cowin.getStates()\r\n                .enqueue(new Callback<StateDetailModel>() {\r\n                    @Override\r\n                    public void onResponse(Call<StateDetailModel> call, Response<StateDetailModel> response) {\r\n                        if (response.body() == null){\r\n                            Toast.makeText(getActivity(),\"Error : \" + \"COWIN API\",Toast.LENGTH_SHORT).show();\r\n\r\n                        }else {\r\n                            stateList.addAll(response.body().getStates());\r\n\r\n                            for(int i=0;i<stateList.size();i++){\r\n                                stateArray.add(stateList.get(i).getState_name());\r\n                            }\r\n\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<StateDetailModel> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n\r\n                    }\r\n                });\r\n\r\n        searchByPinBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);\r\n\r\n                LayoutInflater inflater = getLayoutInflater();\r\n\r\n              //  View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout_pin,findViewById(R.id.bottom_sheet_pin));\r\n\r\n                View sheetView = inflater.inflate(R.layout.bottom_sheet_layout_pin,container ,false);\r\n                EditText pinCodeET = sheetView.findViewById(R.id.pic_code_edittext);\r\n                sheetView.findViewById(R.id.pin_search_btn).setOnClickListener(new View.OnClickListener(){\r\n                    @Override\r\n                    public void onClick(View v) {\r\n                        if (TextUtils.isEmpty(pinCodeET.getText().toString())){\r\n                            Toast.makeText(getActivity(),\"Please Enter PIN Code\",Toast.LENGTH_SHORT).show();\r\n                        }\r\n                        else{\r\n                            Toast.makeText(getActivity(),\"Search Button Clicked \" + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();\r\n                            bottomSheetDialog.dismiss();\r\n                        }\r\n                    }\r\n                });\r\n\r\n                bottomSheetDialog.setContentView(sheetView);\r\n                bottomSheetDialog.show();\r\n            }\r\n        });\r\n\r\n        searchByDistrictBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);\r\n\r\n                LayoutInflater inflater = getLayoutInflater();\r\n\r\n                //  View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout_pin,findViewById(R.id.bottom_sheet_pin));\r\n\r\n                View sheetView = inflater.inflate(R.layout.bottom_sheet_layout_district,container ,false);\r\n                AutoCompleteTextView stateActv = sheetView.findViewById(R.id.state_actv);\r\n                AutoCompleteTextView districtActv = sheetView.findViewById(R.id.district_actv);\r\n                ImageView stateDropImgView = sheetView.findViewById(R.id.state_drop_img);\r\n                ImageView districtDropImgView = sheetView.findViewById(R.id.district_drop_img);\r\n\r\n                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,stateArray);\r\n                stateActv.setAdapter(stateAdapter);\r\n\r\n                stateDropImgView.setOnClickListener(new View.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(View view) {\r\n                        stateActv.showDropDown();\r\n                    }\r\n                });\r\n\r\n\r\n\r\n                sheetView.findViewById(R.id.district_search_btn).setOnClickListener(new View.OnClickListener(){\r\n                    @Override\r\n                    public void onClick(View v) {\r\n                        if (TextUtils.isEmpty(stateActv.getText().toString())){\r\n                            Toast.makeText(getActivity(),\"Please Enter PIN Code\",Toast.LENGTH_SHORT).show();\r\n                        }\r\n                        else{\r\n                            Toast.makeText(getActivity(),\"Search Button Clicked \" + stateActv.getText().toString(),Toast.LENGTH_SHORT).show();\r\n                            bottomSheetDialog.dismiss();\r\n                        }\r\n                    }\r\n                });\r\n\r\n                bottomSheetDialog.setContentView(sheetView);\r\n                bottomSheetDialog.show();\r\n            }\r\n        });\r\n\r\n//        Toast.makeText(getActivity(), \"CaV \" + CaV.getCountryOverview().getActive()+CaV.getVaccineModel().getIndia_dose1(), Toast.LENGTH_SHORT).show();\r\n\r\n        expandableListView = binding.expandableListView;\r\n        expandableListDetail = ExpandableListData.getData(CaV);\r\n        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());\r\n        expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);\r\n        expandableListView.setAdapter(expandableListAdapter);\r\n\r\n\r\n        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {\r\n\r\n            @Override\r\n            public void onGroupExpand(int groupPosition) {\r\n                Toast.makeText(getContext(),\r\n                        expandableListTitle.get(groupPosition) + \" List Expanded.\",\r\n                        Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {\r\n\r\n            @Override\r\n            public void onGroupCollapse(int groupPosition) {\r\n                Toast.makeText(getContext(),\r\n                        expandableListTitle.get(groupPosition) + \" List Collapsed.\",\r\n                        Toast.LENGTH_SHORT).show();\r\n\r\n            }\r\n        });\r\n\r\n        //\r\n\r\n\r\n\r\n        return root;\r\n    }\r\n\r\n    private void setUpdateDate(String updated) {\r\n        DateFormat format =  new SimpleDateFormat(\"MMM dd, yyyy\");\r\n\r\n        long milliseconds = Long.parseLong(updated);\r\n        Calendar calendar = Calendar.getInstance();\r\n        calendar.setTimeInMillis(milliseconds);\r\n\r\n        updatedate.setText(\"Updated at \"+format.format(calendar.getTime()));\r\n    }\r\n\r\n    private void init(){\r\n\r\n        pieChart = binding.pieChart;\r\n        updatedate = binding.updateDate;\r\n\r\n        searchByPinBtn = binding.searchByPinBtn;\r\n        searchByDistrictBtn = binding.searchByDistrictBtn;\r\n\r\n    }\r\n\r\n\r\n\r\n    @Override\r\n    public void onDestroyView() {\r\n        super.onDestroyView();\r\n        binding = null;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java	(revision 6baf081b1b103a4f763e5ce6b27f563225cb90f8)
++++ app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java	(date 1626609744684)
+@@ -1,10 +1,12 @@
+ package com.cea.covidshield.ui.home;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
+ import android.text.TextUtils;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.AdapterView;
+ import android.widget.ArrayAdapter;
+ import android.widget.AutoCompleteTextView;
+ import android.widget.EditText;
+@@ -25,9 +27,12 @@
+ import com.cea.covidshield.databinding.FragmentHomeBinding;
+ import com.cea.covidshield.model.CountryAndVaccine;
+ import com.cea.covidshield.model.CountryOverview;
++import com.cea.covidshield.model.District;
++import com.cea.covidshield.model.DistrictDataModel;
+ import com.cea.covidshield.model.State;
+ import com.cea.covidshield.model.StateDetailModel;
+ import com.cea.covidshield.model.VaccineModel;
++import com.cea.covidshield.ui.search_vaccine_availablitiy.VaccineAvailabiltyActivity;
+ import com.google.android.material.bottomsheet.BottomSheetDialog;
+ 
+ import org.eazegraph.lib.charts.PieChart;
+@@ -81,6 +86,8 @@
+ 
+     List<State> stateList;
+     List<String> stateArray;
++    List<District> districtList;
++    List<String> districtArray;
+ 
+     public View onCreateView(@NonNull LayoutInflater inflater,
+                              ViewGroup container, Bundle savedInstanceState) {
+@@ -93,6 +100,8 @@
+         country_list = new ArrayList<>();
+         stateList = new ArrayList<>();
+         stateArray = new ArrayList<>();
++        districtList = new ArrayList<>();
++        districtArray = new ArrayList<>();
+         apiService_country = ApiClient.getInstance(getActivity()).getService_Country();
+         apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();
+         apiService_cowin = ApiClient.getInstance(getActivity()).getService_Cowin();
+@@ -194,9 +203,13 @@
+                     public void onClick(View v) {
+                         if (TextUtils.isEmpty(pinCodeET.getText().toString())){
+                             Toast.makeText(getActivity(),"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
++
+                         }
+                         else{
+                             Toast.makeText(getActivity(),"Search Button Clicked " + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();
++                            Intent intent = new Intent(getActivity(), VaccineAvailabiltyActivity.class);
++                            intent.putExtra("pincode",pinCodeET.getText().toString().trim());
++                            startActivity(intent);
+                             bottomSheetDialog.dismiss();
+                         }
+                     }
+@@ -224,6 +237,35 @@
+ 
+                 ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,stateArray);
+                 stateActv.setAdapter(stateAdapter);
++                stateActv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
++                    @Override
++                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
++                        int pos = i;
++                        Toast.makeText(getActivity(),stateArray.get(pos),Toast.LENGTH_SHORT).show();
++                        Integer state_id = stateList.get(i).getState_id();
++
++                        apiService_cowin.getDistricts(Integer.toString(state_id))
++                                .enqueue(new Callback<DistrictDataModel>() {
++                                    @Override
++                                    public void onResponse(Call<DistrictDataModel> call, Response<DistrictDataModel> response) {
++                                        districtList.clear();
++                                        districtArray.clear();
++                                        districtList.addAll(response.body().getDistricts());
++                                        for (int i=0;i<districtList.size();i++){
++                                            districtArray.add(districtList.get(i).getDistrictName());
++                                        }
++                                        ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,districtArray);
++                                        districtActv.setAdapter(districtAdapter);
++                                    }
++
++                                    @Override
++                                    public void onFailure(Call<DistrictDataModel> call, Throwable t) {
++                                        Toast.makeText(getActivity(),"Error : " + t.getMessage(),Toast.LENGTH_SHORT).show();
++                                    }
++                                });
++
++                    }
++                });
+ 
+                 stateDropImgView.setOnClickListener(new View.OnClickListener() {
+                     @Override
+@@ -232,13 +274,20 @@
+                     }
+                 });
+ 
++                districtDropImgView.setOnClickListener(new View.OnClickListener() {
++                    @Override
++                    public void onClick(View view) {
++                        districtActv.showDropDown();
++                    }
++                });
++
+ 
+ 
+                 sheetView.findViewById(R.id.district_search_btn).setOnClickListener(new View.OnClickListener(){
+                     @Override
+                     public void onClick(View v) {
+-                        if (TextUtils.isEmpty(stateActv.getText().toString())){
+-                            Toast.makeText(getActivity(),"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
++                        if (TextUtils.isEmpty(stateActv.getText().toString()) || TextUtils.isEmpty(districtActv.getText().toString().trim())){
++                            Toast.makeText(getActivity(),"Empty Fields!!",Toast.LENGTH_SHORT).show();
+                         }
+                         else{
+                             Toast.makeText(getActivity(),"Search Button Clicked " + stateActv.getText().toString(),Toast.LENGTH_SHORT).show();
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.cea.covidshield\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.MyApplication\">\r\n\r\n        <activity android:name=\".splashactivity\"\r\n            android:noHistory=\"true\">\r\n\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    <activity\r\n        android:name=\"com.cea.covidshield.MainActivity\"\r\n        android:label=\"@string/app_name\"\r\n        android:theme=\"@style/Theme.MyApplication.NoActionBar\">\r\n    </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 6baf081b1b103a4f763e5ce6b27f563225cb90f8)
++++ app/src/main/AndroidManifest.xml	(date 1626594624692)
+@@ -2,7 +2,7 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="com.cea.covidshield">
+ 
+-    <uses-permission android:name="android.permission.INTERNET"/>
++    <uses-permission android:name="android.permission.INTERNET" />
+ 
+     <application
+         android:allowBackup="true"
+@@ -11,21 +11,20 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.MyApplication">
+-
+-        <activity android:name=".splashactivity"
++        <activity android:name=".ui.search_vaccine_availablitiy.VaccineAvailabiltyActivity"></activity>
++        <activity
++            android:name=".splashactivity"
+             android:noHistory="true">
+-
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+-    <activity
+-        android:name="com.cea.covidshield.MainActivity"
+-        android:label="@string/app_name"
+-        android:theme="@style/Theme.MyApplication.NoActionBar">
+-    </activity>
++        <activity
++            android:name=".MainActivity"
++            android:label="@string/app_name"
++            android:theme="@style/Theme.MyApplication.NoActionBar"></activity>
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"purple_200\">#FFBB86FC</color>\r\n    <color name=\"purple_500\">#FF6200EE</color>\r\n    <color name=\"purple_700\">#FF3700B3</color>\r\n    <color name=\"teal_200\">#FF03DAC5</color>\r\n    <color name=\"teal_700\">#FF018786</color>\r\n    <color name=\"black\">#FF000000</color>\r\n    <color name=\"white\">#FFFFFFFF</color>\r\n\r\n    <color name=\"light_gray\">#AFACAC</color>\r\n\r\n    <color name=\"border_color\">#1E1E30</color>\r\n\r\n    <color name=\"color_primary\">#0000D1</color>\r\n    <color name=\"color_primary_dark\">#0000A3</color>\r\n\r\n    <color name=\"dark_shade_1\">#161625</color>\r\n    <color name=\"dark_shade2\">#1E1E30</color>\r\n\r\n    <color name=\"green\">#7EC544</color>\r\n    <color name=\"yellow\">#FBC233</color>\r\n    <color name=\"red\">#F6404F</color>\r\n    <color name=\"blue\">#78DBF3</color>\r\n    <color name=\"pink\">#F375B5</color>\r\n    <color name=\"orange\">#FF7100</color>\r\n    <color name=\"blue_pie\">#007afe</color>\r\n    <color name=\"red_pie\">#F6404F</color>\r\n    <color name=\"green_pie\">#08a045</color>\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision 6baf081b1b103a4f763e5ce6b27f563225cb90f8)
++++ app/src/main/res/values/colors.xml	(date 1626600471851)
+@@ -28,4 +28,8 @@
+     <color name="red_pie">#F6404F</color>
+     <color name="green_pie">#08a045</color>
+ 
++    <color name="dark_blue">#022464</color>
++
++    <color name="brown_light">#c20505</color>
++
+ </resources>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml	(date 1626583172170)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml	(date 1626583172170)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM_[Default_Changelist]" date="1626542734911" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM_[Default_Changelist]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17-07-2021 10:55 PM [Default Changelist]" />
++</changelist>
+\ No newline at end of file
+Index: app/src/main/java/com/cea/covidshield/Api/ApiService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.cea.covidshield.Api;\r\n\r\nimport com.cea.covidshield.model.CountryOverview;\r\nimport com.cea.covidshield.model.StateDetailModel;\r\nimport com.cea.covidshield.model.VaccineModel;\r\n\r\nimport java.util.List;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.http.GET;\r\nimport retrofit2.http.Query;\r\n\r\n\r\npublic interface ApiService {\r\n\r\n    @GET(\"v2/countries\")\r\n    Call<List<CountryOverview>> getCountryData();\r\n\r\n    @GET(\"vaccine/vaccine_counts_today.json\")\r\n    Call<VaccineModel> getVaccineDosesinfo(@Query(\"timestamp\") String timestamp);\r\n\r\n    @GET(\"v2/admin/location/states\")\r\n    Call<StateDetailModel> getStates();\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/cea/covidshield/Api/ApiService.java	(revision 6baf081b1b103a4f763e5ce6b27f563225cb90f8)
++++ app/src/main/java/com/cea/covidshield/Api/ApiService.java	(date 1626593724832)
+@@ -1,6 +1,8 @@
+ package com.cea.covidshield.Api;
+ 
++import com.cea.covidshield.model.CalenderPinApiModels.CalenderPinCentersModel;
+ import com.cea.covidshield.model.CountryOverview;
++import com.cea.covidshield.model.DistrictDataModel;
+ import com.cea.covidshield.model.StateDetailModel;
+ import com.cea.covidshield.model.VaccineModel;
+ 
+@@ -8,6 +10,7 @@
+ 
+ import retrofit2.Call;
+ import retrofit2.http.GET;
++import retrofit2.http.Path;
+ import retrofit2.http.Query;
+ 
+ 
+@@ -22,5 +25,11 @@
+     @GET("v2/admin/location/states")
+     Call<StateDetailModel> getStates();
+ 
++    @GET("v2/admin/location/districts/{state_id}")
++    Call<DistrictDataModel> getDistricts(@Path(value = "state_id",encoded = true) String state_id);
++
++    @GET("v2/appointment/sessions/public/calendarByPin")
++    Call<CalenderPinCentersModel> getCentreWeekByPin(@Query("pincode") String pincode,@Query("date") String date);
++
+ }
+ 
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_48_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_48_PM__Default_Changelist_.xml

@@ -28,4 +28,8 @@
     <color name="red_pie">#F6404F</color>
     <color name="green_pie">#08a045</color>
 
+    <color name="dark_blue">#022464</color>
+
+    <color name="brown_light">#c20505</color>
+
 </resources>

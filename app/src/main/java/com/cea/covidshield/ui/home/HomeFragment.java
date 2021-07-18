@@ -1,10 +1,12 @@
 package com.cea.covidshield.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -25,9 +27,12 @@ import com.cea.covidshield.R;
 import com.cea.covidshield.databinding.FragmentHomeBinding;
 import com.cea.covidshield.model.CountryAndVaccine;
 import com.cea.covidshield.model.CountryOverview;
+import com.cea.covidshield.model.District;
+import com.cea.covidshield.model.DistrictDataModel;
 import com.cea.covidshield.model.State;
 import com.cea.covidshield.model.StateDetailModel;
 import com.cea.covidshield.model.VaccineModel;
+import com.cea.covidshield.ui.search_vaccine_availablitiy.VaccineAvailabiltyActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.eazegraph.lib.charts.PieChart;
@@ -81,6 +86,8 @@ public class HomeFragment extends Fragment{
 
     List<State> stateList;
     List<String> stateArray;
+    List<District> districtList;
+    List<String> districtArray;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +100,8 @@ public class HomeFragment extends Fragment{
         country_list = new ArrayList<>();
         stateList = new ArrayList<>();
         stateArray = new ArrayList<>();
+        districtList = new ArrayList<>();
+        districtArray = new ArrayList<>();
         apiService_country = ApiClient.getInstance(getActivity()).getService_Country();
         apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();
         apiService_cowin = ApiClient.getInstance(getActivity()).getService_Cowin();
@@ -194,9 +203,13 @@ public class HomeFragment extends Fragment{
                     public void onClick(View v) {
                         if (TextUtils.isEmpty(pinCodeET.getText().toString())){
                             Toast.makeText(getActivity(),"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
+
                         }
                         else{
                             Toast.makeText(getActivity(),"Search Button Clicked " + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), VaccineAvailabiltyActivity.class);
+                            intent.putExtra("pincode",pinCodeET.getText().toString().trim());
+                            startActivity(intent);
                             bottomSheetDialog.dismiss();
                         }
                     }
@@ -224,6 +237,35 @@ public class HomeFragment extends Fragment{
 
                 ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,stateArray);
                 stateActv.setAdapter(stateAdapter);
+                stateActv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        int pos = i;
+                        Toast.makeText(getActivity(),stateArray.get(pos),Toast.LENGTH_SHORT).show();
+                        Integer state_id = stateList.get(i).getState_id();
+
+                        apiService_cowin.getDistricts(Integer.toString(state_id))
+                                .enqueue(new Callback<DistrictDataModel>() {
+                                    @Override
+                                    public void onResponse(Call<DistrictDataModel> call, Response<DistrictDataModel> response) {
+                                        districtList.clear();
+                                        districtArray.clear();
+                                        districtList.addAll(response.body().getDistricts());
+                                        for (int i=0;i<districtList.size();i++){
+                                            districtArray.add(districtList.get(i).getDistrictName());
+                                        }
+                                        ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,districtArray);
+                                        districtActv.setAdapter(districtAdapter);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<DistrictDataModel> call, Throwable t) {
+                                        Toast.makeText(getActivity(),"Error : " + t.getMessage(),Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                    }
+                });
 
                 stateDropImgView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -232,13 +274,20 @@ public class HomeFragment extends Fragment{
                     }
                 });
 
+                districtDropImgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        districtActv.showDropDown();
+                    }
+                });
+
 
 
                 sheetView.findViewById(R.id.district_search_btn).setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if (TextUtils.isEmpty(stateActv.getText().toString())){
-                            Toast.makeText(getActivity(),"Please Enter PIN Code",Toast.LENGTH_SHORT).show();
+                        if (TextUtils.isEmpty(stateActv.getText().toString()) || TextUtils.isEmpty(districtActv.getText().toString().trim())){
+                            Toast.makeText(getActivity(),"Empty Fields!!",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(getActivity(),"Search Button Clicked " + stateActv.getText().toString(),Toast.LENGTH_SHORT).show();

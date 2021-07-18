@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:background="@drawable/item_border">
+
+    <TextView
+        android:id="@+id/date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18-07-2021"
+        android:fontFamily="@font/rubik_bold"/>
+
+    <TextView
+        android:id="@+id/centre_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ALUVA DISTRICT HOSPITAL"
+        android:layout_below="@+id/date_tv"
+        android:textColor="@color/dark_blue"/>
+    <TextView
+        android:id="@+id/fee_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAID"
+        android:layout_toEndOf="@+id/centre_name"
+        android:layout_toRightOf="@+id/centre_name"
+        android:layout_below="@+id/date_tv"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/oval"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
+
+    <TextView
+        android:id="@+id/center_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Angamaly Manjapra Rd Opposite To Government Veternity Hospital Angamaly Kerala, Ernakulam, Kerala, 683572"
+        android:layout_below="@+id/centre_name"/>
+
+    <TextView
+        android:id="@+id/bookedStatTv"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:text="Booked"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:background="@color/brown_light"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="10sp"
+        android:textAllCaps="true"
+        />
+
+
+
+    <LinearLayout
+        android:id="@+id/covishield_vacc_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/center_address"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Covishiled"
+            android:textAllCaps="true"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/dark_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D1:"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d1_covisheld"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D2:"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d2_covisheld"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/covishield_fee"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Rs.780"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/covaxin_vacc_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/covishield_vacc_LL"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Covaxin"
+            android:textAllCaps="true"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/dark_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D1:"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d1_covaxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D2:"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d2_covaxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Rs.780"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sputnikv_vacc_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/covaxin_vacc_LL"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Sputnik V"
+            android:textAllCaps="true"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/dark_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D1:"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d1_sputnikv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D2:"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/brown_light"/>
+        <TextView
+            android:id="@+id/d2_sputnikv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1265"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Rs.780"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
