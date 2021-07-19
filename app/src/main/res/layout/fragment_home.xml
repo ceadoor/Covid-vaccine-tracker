@@ -103,7 +103,8 @@
                             android:text="Confirm"
                             android:textColor="@color/white"
                             android:layout_marginStart="5dp"
-                            android:fontFamily="@string/regular"/>
+                            android:fontFamily="@string/regular"
+                            android:layout_marginLeft="5dp" />
 
                     </LinearLayout>
 
@@ -257,6 +258,24 @@
                 android:background="@drawable/oval"
                 android:fontFamily="@string/regular"
                 android:text="@string/search_by_district" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/notification_background_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:buttonTint="#5600ee"
+                    android:text="Save your preference for notification" />
+
+            </RelativeLayout>
+
+
+
         </LinearLayout>
 
     </RelativeLayout>
