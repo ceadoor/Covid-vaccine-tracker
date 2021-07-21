@@ -57,10 +57,14 @@ public class DonationFragment extends Fragment implements AdapterView.OnItemSele
                     binding.names.requestFocus();
                     binding.names.setError("ENTER ONLY ALPHABETICAL CHARACTER");
                 }
-                else if(phone.length()==0)
+                else if(phone.length() < 10)
                 {
                     binding.Phone.requestFocus();
                     binding.Phone.setError("FIELD CANNOT BE EMPTY");
+                }
+                else if(email.length()!=0 && !email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+                    binding.EmailAddress.requestFocus();
+                    binding.EmailAddress.setError("ENTER A VALID EMAIL ADDRESS");
                 }
                 else if(place.length()==0)
                 {
@@ -84,6 +88,10 @@ public class DonationFragment extends Fragment implements AdapterView.OnItemSele
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        String item = adapterView.getItemAtPosition(i).toString();
+
+        Toast.makeText(getActivity(),item,Toast.LENGTH_SHORT).show();
 
     }
 

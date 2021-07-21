@@ -65,6 +65,9 @@
         android:layout_marginRight="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:prefixText="+91"
+        app:prefixTextColor="@color/black"
+        app:prefixTextAppearance="@color/black"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
 
@@ -72,6 +75,7 @@
             android:id="@+id/Phone"
             android:drawableLeft="@drawable/ic_phone_call"
             android:drawablePadding="15dp"
+            android:maxLength="10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

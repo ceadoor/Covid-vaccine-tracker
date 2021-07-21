@@ -1,5 +1,6 @@
 package com.cea.covidshield.ui.ask_requirement;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.cea.covidshield.databinding.FragmentAskreqBinding;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AskreqFragment extends Fragment {
 
@@ -27,7 +31,6 @@ public class AskreqFragment extends Fragment {
         final Button button = binding.button;
 
 
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,6 +40,8 @@ public class AskreqFragment extends Fragment {
                 final String email = binding.EmailAddress.getText().toString();
                 final String address = binding.address.getText().toString();
                 final String requirements = binding.requirements.getText().toString();
+
+
 
 
                 if(name.length()==0)
@@ -49,10 +54,14 @@ public class AskreqFragment extends Fragment {
                     binding.names.requestFocus();
                     binding.names.setError("ENTER ONLY ALPHABETICAL CHARACTER");
                 }
-                else if(phone.length()==0 && !phone.matches("[0-9],+"))
+                else if( phone.length() < 10 )
                 {
                     binding.Phone.requestFocus();
-                    binding.Phone.setError("FIELD CANNOT BE EMPTY");
+                    binding.Phone.setError("ENTER VALID PHONE NUMBER");
+                }
+                else if(email.length()!=0 && !email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+                    binding.EmailAddress.requestFocus();
+                    binding.EmailAddress.setError("ENTER A VALID EMAIL ADDRESS");
                 }
                 else if(address.length()==0)
                 {
@@ -64,10 +73,14 @@ public class AskreqFragment extends Fragment {
                     binding.requirements.requestFocus();
                     binding.requirements.setError("FIELD CANNOT BE EMPTY");
                 }
-                else
+                else {
                     // add your code here
                     Toast.makeText(getActivity(), "Your Response has been saved", Toast.LENGTH_SHORT).show();
 
+//                    Intent intent = get;
+//                    getActivity().finish();
+//                    startActivity(intent);
+                }
             }
         });
         return root;
@@ -78,4 +91,5 @@ public class AskreqFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

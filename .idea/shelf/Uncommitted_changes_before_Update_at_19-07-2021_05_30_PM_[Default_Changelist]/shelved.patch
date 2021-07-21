@@ -1,0 +1,131 @@
+Index: app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.cea.covidshield.ui.home;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.AutoCompleteTextView;\r\nimport android.widget.EditText;\r\nimport android.widget.ExpandableListAdapter;\r\nimport android.widget.ExpandableListView;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.widget.AppCompatButton;\r\nimport androidx.fragment.app.Fragment;\r\n\r\n\r\nimport com.cea.covidshield.Api.ApiClient;\r\nimport com.cea.covidshield.Api.ApiService;\r\nimport com.cea.covidshield.R;\r\nimport com.cea.covidshield.databinding.FragmentHomeBinding;\r\nimport com.cea.covidshield.model.CountryAndVaccine;\r\nimport com.cea.covidshield.model.CountryOverview;\r\nimport com.cea.covidshield.model.District;\r\nimport com.cea.covidshield.model.DistrictDataModel;\r\nimport com.cea.covidshield.model.State;\r\nimport com.cea.covidshield.model.StateDetailModel;\r\nimport com.cea.covidshield.model.VaccineModel;\r\nimport com.cea.covidshield.ui.search_vaccine_availablitiy.VaccineAvailabiltyActivity;\r\nimport com.google.android.material.bottomsheet.BottomSheetDialog;\r\n\r\nimport org.eazegraph.lib.charts.PieChart;\r\nimport org.eazegraph.lib.models.PieModel;\r\n\r\nimport java.text.DateFormat;\r\nimport java.text.NumberFormat;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class HomeFragment extends Fragment{\r\n\r\n    private TextView totalConfirm;\r\n    private TextView totalActive;\r\n    private TextView totalRecovered;\r\n    private TextView totalDeath;\r\n    private TextView totalTests;\r\n    private TextView todayConfirm;\r\n    private TextView todayRecovered;\r\n    private TextView todayDeath;\r\n    private TextView dose1_tv;\r\n    private TextView dose2_tv;\r\n    private TextView updatedate;\r\n    private PieChart pieChart;\r\n    private AppCompatButton searchByPinBtn;\r\n    private AppCompatButton searchByDistrictBtn;\r\n    private BottomSheetDialog bottomSheetDialog;\r\n\r\n    private List<CountryOverview> country_list;\r\n    private VaccineModel vaccineData;\r\n    public ApiService apiService_country;\r\n    public ApiService apiService_vaccine;\r\n    public ApiService apiService_cowin;\r\n\r\n    private FragmentHomeBinding binding;\r\n\r\n    public CountryAndVaccine CaV;\r\n\r\n    // Expanded View\r\n    ExpandableListView expandableListView;\r\n    ExpandableListAdapter expandableListAdapter;\r\n    List<String> expandableListTitle;\r\n    HashMap<String, List<CountryAndVaccine>> expandableListDetail;\r\n\r\n    List<State> stateList;\r\n    List<String> stateArray;\r\n    List<District> districtList;\r\n    List<String> districtArray;\r\n\r\n    public View onCreateView(@NonNull LayoutInflater inflater,\r\n                             ViewGroup container, Bundle savedInstanceState) {\r\n\r\n        binding = FragmentHomeBinding.inflate(inflater, container, false);\r\n        View root = binding.getRoot();\r\n\r\n        //\r\n\r\n        country_list = new ArrayList<>();\r\n        stateList = new ArrayList<>();\r\n        stateArray = new ArrayList<>();\r\n        districtList = new ArrayList<>();\r\n        districtArray = new ArrayList<>();\r\n        apiService_country = ApiClient.getInstance(getActivity()).getService_Country();\r\n        apiService_vaccine = ApiClient.getInstance(getActivity()).getService_Vaccine();\r\n        apiService_cowin = ApiClient.getInstance(getActivity()).getService_Cowin();\r\n        init();\r\n        CaV = new CountryAndVaccine();\r\n\r\n        apiService_country.getCountryData()\r\n                .enqueue(new Callback<List<CountryOverview>>() {\r\n                    @Override\r\n                    public void onResponse(Call<List<CountryOverview>> call, Response<List<CountryOverview>> response) {\r\n                        country_list.addAll(response.body());\r\n\r\n                        for (int i=0; i<country_list.size();i++){\r\n                            if (country_list.get(i).getCountry().equals(\"India\")){\r\n\r\n                                CaV.setCountryOverview(country_list.get(i));\r\n\r\n                                int confirm = Integer.parseInt(country_list.get(i).getCases());\r\n                                int active = Integer.parseInt(country_list.get(i).getActive());\r\n                                int recovered = Integer.parseInt(country_list.get(i).getRecovered());\r\n                                int death = Integer.parseInt(country_list.get(i).getDeaths());\r\n\r\n                                setUpdateDate(country_list.get(i).getUpdated());\r\n                                pieChart.addPieSlice(new PieModel(\"Confirm\",confirm,root.getResources().getColor(R.color.yellow)));\r\n                                pieChart.addPieSlice(new PieModel(\"Active\",active,root.getResources().getColor(R.color.orange)));\r\n                                pieChart.addPieSlice(new PieModel(\"Recovered\",recovered,root.getResources().getColor(R.color.green_pie)));\r\n                                pieChart.addPieSlice(new PieModel(\"Death\",death,root.getResources().getColor(R.color.red_pie)));\r\n                                pieChart.startAnimation();\r\n\r\n\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<List<CountryOverview>> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n\r\n        String timestamp = Long.toString(System.currentTimeMillis()/1000L);\r\n\r\n        apiService_vaccine.getVaccineDosesinfo(timestamp)\r\n                .enqueue(new Callback<VaccineModel>() {\r\n                    @Override\r\n                    public void onResponse(Call<VaccineModel> call, Response<VaccineModel> response) {\r\n\r\n                        vaccineData = response.body();\r\n\r\n                        CaV.setVaccineModel(vaccineData);\r\n\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<VaccineModel> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n\r\n                    }\r\n                });\r\n\r\n        apiService_cowin.getStates()\r\n                .enqueue(new Callback<StateDetailModel>() {\r\n                    @Override\r\n                    public void onResponse(Call<StateDetailModel> call, Response<StateDetailModel> response) {\r\n                        if (response.body() == null){\r\n                            Toast.makeText(getActivity(),\"Error : \" + \"COWIN API\",Toast.LENGTH_SHORT).show();\r\n\r\n                        }else {\r\n                            stateList.addAll(response.body().getStates());\r\n\r\n                            for(int i=0;i<stateList.size();i++){\r\n                                stateArray.add(stateList.get(i).getState_name());\r\n                            }\r\n\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(Call<StateDetailModel> call, Throwable t) {\r\n                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n\r\n                    }\r\n                });\r\n\r\n        searchByPinBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);\r\n\r\n                LayoutInflater inflater = getLayoutInflater();\r\n\r\n              //  View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout_pin,findViewById(R.id.bottom_sheet_pin));\r\n\r\n                View sheetView = inflater.inflate(R.layout.bottom_sheet_layout_pin,container ,false);\r\n                EditText pinCodeET = sheetView.findViewById(R.id.pic_code_edittext);\r\n                sheetView.findViewById(R.id.pin_search_btn).setOnClickListener(new View.OnClickListener(){\r\n                    @Override\r\n                    public void onClick(View v) {\r\n                        if (TextUtils.isEmpty(pinCodeET.getText().toString())){\r\n                            Toast.makeText(getActivity(),\"Please Enter PIN Code\",Toast.LENGTH_SHORT).show();\r\n\r\n                        }\r\n                        else{\r\n                            Toast.makeText(getActivity(),\"Search Button Clicked \" + pinCodeET.getText().toString(),Toast.LENGTH_SHORT).show();\r\n                            Intent intent = new Intent(getActivity(), VaccineAvailabiltyActivity.class);\r\n                            intent.putExtra(\"pincode\",pinCodeET.getText().toString().trim());\r\n                            startActivity(intent);\r\n                            bottomSheetDialog.dismiss();\r\n                        }\r\n                    }\r\n                });\r\n\r\n                bottomSheetDialog.setContentView(sheetView);\r\n                bottomSheetDialog.show();\r\n            }\r\n        });\r\n\r\n        searchByDistrictBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);\r\n\r\n                LayoutInflater inflater = getLayoutInflater();\r\n\r\n                //  View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout_pin,findViewById(R.id.bottom_sheet_pin));\r\n\r\n                View sheetView = inflater.inflate(R.layout.bottom_sheet_layout_district,container ,false);\r\n                AutoCompleteTextView stateActv = sheetView.findViewById(R.id.state_actv);\r\n                AutoCompleteTextView districtActv = sheetView.findViewById(R.id.district_actv);\r\n                ImageView stateDropImgView = sheetView.findViewById(R.id.state_drop_img);\r\n                ImageView districtDropImgView = sheetView.findViewById(R.id.district_drop_img);\r\n\r\n                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,stateArray);\r\n                stateActv.setAdapter(stateAdapter);\r\n                stateActv.setOnItemClickListener(new AdapterView.OnItemClickListener() {\r\n                    @Override\r\n                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {\r\n                        int pos = i;\r\n                        Toast.makeText(getActivity(),stateArray.get(pos),Toast.LENGTH_SHORT).show();\r\n                        Integer state_id = stateList.get(i).getState_id();\r\n\r\n                        apiService_cowin.getDistricts(Integer.toString(state_id))\r\n                                .enqueue(new Callback<DistrictDataModel>() {\r\n                                    @Override\r\n                                    public void onResponse(Call<DistrictDataModel> call, Response<DistrictDataModel> response) {\r\n                                        districtList.clear();\r\n                                        districtArray.clear();\r\n                                        districtList.addAll(response.body().getDistricts());\r\n                                        for (int i=0;i<districtList.size();i++){\r\n                                            districtArray.add(districtList.get(i).getDistrictName());\r\n                                        }\r\n                                        ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line,districtArray);\r\n                                        districtActv.setAdapter(districtAdapter);\r\n                                    }\r\n\r\n                                    @Override\r\n                                    public void onFailure(Call<DistrictDataModel> call, Throwable t) {\r\n                                        Toast.makeText(getActivity(),\"Error : \" + t.getMessage(),Toast.LENGTH_SHORT).show();\r\n                                    }\r\n                                });\r\n\r\n                    }\r\n                });\r\n\r\n                stateDropImgView.setOnClickListener(new View.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(View view) {\r\n                        stateActv.showDropDown();\r\n                    }\r\n                });\r\n\r\n                districtDropImgView.setOnClickListener(new View.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(View view) {\r\n                        districtActv.showDropDown();\r\n                    }\r\n                });\r\n\r\n\r\n\r\n                sheetView.findViewById(R.id.district_search_btn).setOnClickListener(new View.OnClickListener(){\r\n                    @Override\r\n                    public void onClick(View v) {\r\n                        if (TextUtils.isEmpty(stateActv.getText().toString()) || TextUtils.isEmpty(districtActv.getText().toString().trim())){\r\n                            Toast.makeText(getActivity(),\"Empty Fields!!\",Toast.LENGTH_SHORT).show();\r\n                        }\r\n                        else{\r\n                            Toast.makeText(getActivity(),\"Search Button Clicked \" + stateActv.getText().toString(),Toast.LENGTH_SHORT).show();\r\n                            bottomSheetDialog.dismiss();\r\n                        }\r\n                    }\r\n                });\r\n\r\n                bottomSheetDialog.setContentView(sheetView);\r\n                bottomSheetDialog.show();\r\n            }\r\n        });\r\n\r\n//        Toast.makeText(getActivity(), \"CaV \" + CaV.getCountryOverview().getActive()+CaV.getVaccineModel().getIndia_dose1(), Toast.LENGTH_SHORT).show();\r\n\r\n        expandableListView = binding.expandableListView;\r\n        expandableListDetail = ExpandableListData.getData(CaV);\r\n        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());\r\n        expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);\r\n        expandableListView.setAdapter(expandableListAdapter);\r\n\r\n\r\n        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {\r\n\r\n            @Override\r\n            public void onGroupExpand(int groupPosition) {\r\n                Toast.makeText(getContext(),\r\n                        expandableListTitle.get(groupPosition) + \" List Expanded.\",\r\n                        Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {\r\n\r\n            @Override\r\n            public void onGroupCollapse(int groupPosition) {\r\n                Toast.makeText(getContext(),\r\n                        expandableListTitle.get(groupPosition) + \" List Collapsed.\",\r\n                        Toast.LENGTH_SHORT).show();\r\n\r\n            }\r\n        });\r\n\r\n        //\r\n\r\n\r\n\r\n        return root;\r\n    }\r\n\r\n    private void setUpdateDate(String updated) {\r\n        DateFormat format =  new SimpleDateFormat(\"MMM dd, yyyy\");\r\n\r\n        long milliseconds = Long.parseLong(updated);\r\n        Calendar calendar = Calendar.getInstance();\r\n        calendar.setTimeInMillis(milliseconds);\r\n\r\n        updatedate.setText(\"Updated at \"+format.format(calendar.getTime()));\r\n    }\r\n\r\n    private void init(){\r\n\r\n        pieChart = binding.pieChart;\r\n        updatedate = binding.updateDate;\r\n\r\n        searchByPinBtn = binding.searchByPinBtn;\r\n        searchByDistrictBtn = binding.searchByDistrictBtn;\r\n\r\n    }\r\n\r\n\r\n\r\n    @Override\r\n    public void onDestroyView() {\r\n        super.onDestroyView();\r\n        binding = null;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java	(revision 07a7d54505afc5382cfec5aad1ff86f402ef9f5f)
++++ app/src/main/java/com/cea/covidshield/ui/home/HomeFragment.java	(date 1626634988393)
+@@ -1,7 +1,16 @@
+ package com.cea.covidshield.ui.home;
+ 
++
++import android.app.AlarmManager;
++import android.app.PendingIntent;
++import android.content.BroadcastReceiver;
++import android.content.Context;
+ import android.content.Intent;
++
++
++
+ import android.os.Bundle;
++import android.os.SystemClock;
+ import android.text.TextUtils;
+ import android.view.LayoutInflater;
+ import android.view.View;
+@@ -190,6 +199,8 @@
+         searchByPinBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
++                startBackGroundProcessButtonClick();
++
+                 bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);
+ 
+                 LayoutInflater inflater = getLayoutInflater();
+@@ -338,6 +349,18 @@
+         return root;
+     }
+ 
++    public void startBackGroundProcessButtonClick(){
++
++        Intent intent = new Intent(getActivity(), myBackgroundProcess.class);
++        intent.setAction("BackgroundProcess");
++
++        //Set the repeated Task
++        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
++        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
++        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 2000, 10000, pendingIntent);
++
++    }
++
+     private void setUpdateDate(String updated) {
+         DateFormat format =  new SimpleDateFormat("MMM dd, yyyy");
+ 
+@@ -366,3 +389,20 @@
+         binding = null;
+     }
+ }
++
++class myBackgroundProcess extends BroadcastReceiver {
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++
++
++
++//        Ringtone ringtone = RingtoneManager.getRingtone(context,RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
++//        ringtone.play();
++
++        Toast.makeText(context, "This is my background process: " , Toast.LENGTH_LONG).show();
++
++        SystemClock.sleep(2000);
++//        ringtone.stop();
++    }
++}
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_06_00_PM__Default_Changelist_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_06_00_PM__Default_Changelist_.xml	(date 1626696031316)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_06_00_PM__Default_Changelist_.xml	(date 1626696031316)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_18-07-2021_06_00_PM_[Default_Changelist]" date="1626611430971" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_06_00_PM_[Default_Changelist]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 18-07-2021 06:00 PM [Default Changelist]" />
++</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_02_50_AM__Default_Changelist_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_02_50_AM__Default_Changelist_.xml	(date 1626696031299)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_02_50_AM__Default_Changelist_.xml	(date 1626696031299)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_18-07-2021_02_50_AM_[Default_Changelist]" date="1626556901645" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18-07-2021_02_50_AM_[Default_Changelist]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 18-07-2021 02:50 AM [Default Changelist]" />
++</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml	(date 1626696031283)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM__Default_Changelist_.xml	(date 1626696031283)
+@@ -0,0 +1,4 @@
++<changelist name="Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM_[Default_Changelist]" date="1626542734911" recycled="true" deleted="true">
++  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17-07-2021_10_55_PM_[Default_Changelist]/shelved.patch" />
++  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17-07-2021 10:55 PM [Default Changelist]" />
++</changelist>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_14_PREVIEW\" default=\"false\" project-jdk-name=\"14\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 07a7d54505afc5382cfec5aad1ff86f402ef9f5f)
++++ .idea/misc.xml	(date 1626620731764)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_14_PREVIEW" default="false" project-jdk-name="14" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_14" default="false" project-jdk-name="14" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">

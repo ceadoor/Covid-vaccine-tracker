@@ -33,6 +33,10 @@
 
             android:title="@string/menu_cvdgdlines" />
         <item
+            android:id="@+id/mh_emr"
+
+            android:title="@string/menu_mhemr"/>
+        <item
             android:id="@+id/settings"
 
             android:title="@string/menu_settings" />

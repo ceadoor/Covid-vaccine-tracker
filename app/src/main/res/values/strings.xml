@@ -11,9 +11,6 @@
     <string name="menu_govt_fac">Govt Facilitators</string>
     <string name="menu_telemedicine">Telemedicine</string>
     <string name="menu_blddonation">Blood Donation</string>
-    <string name="telemed">Log on to <a href="https://esanjeevaniopd.in/">EsanjeevaniOPD</a></string>
-    <string name="a_setu">Log on to <a href="https://www.aarogyasetu.gov.in/">AarogyaSetu</a></string>
-    <string name="covid_jagratha">Log on to <a href="https://covid19jagratha.kerala.nic.in/">Covid-19 Jagratha</a></string>
 
     <string name="requirements">Requirements</string>
     <string name="menu_helpnum">Helpline Numbers</string>
@@ -35,9 +32,10 @@
     <string name="dontn_portal">Donation Portal</string>
     <string name="state">State</string>
     <string name="district">District</string>
+    <string name="menu_mhemr">Mental Health and Emotional Support Libraries</string>
 
 
-<!--    Blood donation dropdown-->
+    <!--    Blood donation dropdown-->
 
     <string-array name="blood_donation_dropdown">
         <item>A+ve</item>

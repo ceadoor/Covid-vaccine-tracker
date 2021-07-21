@@ -54,15 +54,23 @@ public class PortalFragment extends Fragment {
                     binding.names.requestFocus();
                     binding.names.setError("ENTER ONLY ALPHABETICAL CHARACTER");
                 }
-                else if(phone.length()==0)
+                else if(phone.length() < 10)
                 {
                     binding.Phone.requestFocus();
                     binding.Phone.setError("FIELD CANNOT BE EMPTY");
+                }
+                else if(email.length()!=0 && !email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+                    binding.EmailAddress.requestFocus();
+                    binding.EmailAddress.setError("ENTER A VALID EMAIL ADDRESS");
                 }
                 else if(place.length()==0)
                 {
                     binding.places.requestFocus();
                     binding.places.setError("FIELD CANNOT BE EMPTY");
+                }
+                else if(equipments.length()==0 && materials.length()==0 && cash.length()==0 && others.length()==0){
+                    binding.equipments.requestFocus();
+                    binding.equipments.setError("PLEASE MAKE A DONATION");
                 }
                 else
                     // add your code here

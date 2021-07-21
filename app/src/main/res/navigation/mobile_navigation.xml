@@ -50,6 +50,11 @@
         android:label="@string/menu_cvdgdlines"
         tools:layout="@layout/fragment_cvd_gd" />
     <fragment
+        android:id="@+id/mh_emr"
+        android:name="com.cea.covidshield.ui.support_resources.ResourcesFragment"
+        android:label="@string/menu_mhemr"
+        tools:layout="@layout/fragment_resources" />
+    <fragment
         android:id="@+id/settings"
         android:name="com.cea.covidshield.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"

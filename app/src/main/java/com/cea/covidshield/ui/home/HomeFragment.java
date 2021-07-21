@@ -1,7 +1,16 @@
 package com.cea.covidshield.ui.home;
 
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+
+
+
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -23,6 +33,7 @@ import androidx.fragment.app.Fragment;
 
 import com.cea.covidshield.Api.ApiClient;
 import com.cea.covidshield.Api.ApiService;
+import com.cea.covidshield.BackGround;
 import com.cea.covidshield.R;
 import com.cea.covidshield.databinding.FragmentHomeBinding;
 import com.cea.covidshield.model.CountryAndVaccine;
@@ -50,7 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private TextView totalConfirm;
     private TextView totalActive;
@@ -190,6 +201,7 @@ public class HomeFragment extends Fragment{
         searchByPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 bottomSheetDialog = new BottomSheetDialog(getActivity(),R.style.BottomSheetTheme);
 
                 LayoutInflater inflater = getLayoutInflater();
@@ -333,10 +345,13 @@ public class HomeFragment extends Fragment{
 
         //
 
+        CheckBox notification = binding.notificationBackgroundCheckbox;
+        notification.setOnClickListener(this);
 
 
         return root;
     }
+
 
     private void setUpdateDate(String updated) {
         DateFormat format =  new SimpleDateFormat("MMM dd, yyyy");
@@ -365,4 +380,37 @@ public class HomeFragment extends Fragment{
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onClick(View view) {
+
+        if (binding.notificationBackgroundCheckbox.isChecked()){
+
+            Intent intent = new Intent(getActivity(), BackGround.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+
+            int interval = 1000 * 60;
+
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+            Toast.makeText(getContext(), "Notification Set", Toast.LENGTH_SHORT).show();
+
+        }
+        else{
+
+            Intent intent = new Intent(getActivity(), BackGround.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(getContext(), "Notification Canceled", Toast.LENGTH_SHORT).show();
+
+
+        }
+
+    }
 }
+

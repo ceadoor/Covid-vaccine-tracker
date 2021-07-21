@@ -1,10 +1,13 @@
 package com.cea.covidshield.ui.telemedicine;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,14 +26,17 @@ public class TelemedFragment extends Fragment {
         binding = FragmentTeleMedBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        setupHyperlink();
 
+        Button button = binding.telemedHyperlink;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://esanjeevaniopd.in/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
         return root;
-    }
-
-    private void setupHyperlink() {
-        TextView linkTextView = binding.telemedHyperlink;
-        linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 
