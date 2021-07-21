@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="tag">Combined Project of NSS CEA, TRACE CEA and College of Engineering Adoor</string>
     <string name="app_name">NSocio</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
